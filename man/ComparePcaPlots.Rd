@@ -52,8 +52,8 @@ Produces a comparison of principal component multiplots
 \examples{
 
     data(mixdata)
-    ComparePcaPlots(list(mixdata$featuredata,mixdata$featuredata*1.2),
-             list(mixdata$sampledata[,3],mixdata$sampledata[,3])) 
+#     ComparePcaPlots(list(mixdata$featuredata,mixdata$featuredata*1.2),
+#             list(mixdata$sampledata[,3],mixdata$sampledata[,3])) 
 
 }
 \author{

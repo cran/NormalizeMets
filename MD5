@@ -1,6 +1,6 @@
-062e3ce5c0206fca3a4fc885569917ba *DESCRIPTION
+83d38c0662239981662336b21d4644df *DESCRIPTION
 11a4987311ec917b21b78174f73b6eab *NAMESPACE
-5a52e29d05d6478d71a05a8f00b4d517 *R/ComparePcaPlots.R
+0cc494555c0318aa792ff63d5173df0c *R/ComparePcaPlots.R
 680b33680085817eca1354529dac98ff *R/ComparePvalHist.R
 cf67533fa20c31bdd898b6d8b107e0a4 *R/CompareVolcanoPlots.r
 84ad33ad3623e3af5b45cdcbf8ee717a *R/ContrastMatrix.R
@@ -42,6 +42,7 @@ e9fadc1926e89c3480420b550b0c5c95 *R/heatmap_fn.r
 0bbd11ed3231ea0858805cab9e9765a6 *R/print.results.R
 992e32d7e39e0e196bf9dbf6c1bd8bbf *R/reducedlabel.R
 af04f49bc55ad245f9c0251af90fbd76 *R/shiftCor_fn.R
+889ea01ceb9a5c04993c0d5890993c6d *build/vignette.rds
 065161881e86ad9d84cf648b948ae286 *data/Didata.RData
 9ca7089542bc067e49db6173b2562187 *data/UVdata.RData
 d8a22b94970a00492a99e2ea0076d626 *data/alldataC.RData
@@ -49,7 +50,10 @@ d8a22b94970a00492a99e2ea0076d626 *data/alldataC.RData
 fb56d226dce3958d7cddb9eac5dfd1d6 *data/featuredata_roots.RData
 555a6195e74a30350e3a394a06a6d290 *data/mixdata.RData
 3d31e15b92485db9e9a8d8bc5c1d79f4 *data/uv_ruvrandclust.RData
-9fd216db226db362925f6e76370093ea *man/ComparePcaPlots.Rd
+9a7e36af76516f70409a1798c345fc71 *inst/doc/NormalizeMets_vignette.R
+6cd0ae460aac0b427a47b9d2cce57dbe *inst/doc/NormalizeMets_vignette.Rmd
+e4fea7f606ee1267884b22740f966780 *inst/doc/NormalizeMets_vignette.html
+35d49fb652451073d8267dbc57480175 *man/ComparePcaPlots.Rd
 a136510445c4057c4ba3526db55ba7d7 *man/ComparePvalHist.Rd
 39dd308ffdce062b5c6e3585133ca326 *man/CompareRlaPlots.Rd
 c19db77438162cb19ec946a632d24111 *man/CompareVolcanoPlots.Rd
@@ -84,3 +88,5 @@ c763b001542fa02a829f896f6a40936e *man/metgroupCheck.Rd
 71b11e7bf374f3ea81a1b1c6a75883e5 *man/mixdata.Rd
 2661af07428c669db086714b2b4a398b *man/multiplot.Rd
 f353e10254e2bca1bdbce2f99a322315 *man/uv_ruvrandclust.Rd
+6cd0ae460aac0b427a47b9d2cce57dbe *vignettes/NormalizeMets_vignette.Rmd
+1bbd05d98c2e410eeceba9ccee8fd778 *vignettes/library.bib
