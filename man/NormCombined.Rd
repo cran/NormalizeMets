@@ -9,7 +9,7 @@ NormCombined(featuredata, methods = c("rlsc", "median"),
 }
 \arguments{
 \item{featuredata}{featuredata A data frame in the featuredata format. 
- This is a dataframe with metabolites in columns and samples in rows.
+This is a dataframe with metabolites in columns and samples in rows.
 Unique sample names should be provided as row names.}
 
 \item{methods}{A character vector indicating which two methods should be used in order.}

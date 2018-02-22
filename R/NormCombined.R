@@ -3,7 +3,7 @@
 #' Normalise a metabolomic data matrix using a combination of methods
 #' 
 #' @param featuredata featuredata A data frame in the featuredata format. 
-#'  This is a dataframe with metabolites in columns and samples in rows.
+#' This is a dataframe with metabolites in columns and samples in rows.
 #' Unique sample names should be provided as row names.
 #' @param methods A character vector indicating which two methods should be used in order. 
 #' @param ... Inputs for the \code{NormScaling}, \code{NormQcmets}, and \code{NormQcsamples} 
@@ -108,7 +108,7 @@ NormCombined <-function(featuredata,
               if (!is.null(finaloutputname)) {
                 paste(c(finaloutputname, ".csv"), collapse="")
               } else {
-                paste(c("normalized_", method, ".csv"), collapse="")
+                paste(c("normalized_", method1,"_",method2, ".csv"), collapse="")
               }
     )
   }

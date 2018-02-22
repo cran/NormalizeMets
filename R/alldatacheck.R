@@ -16,16 +16,21 @@ alldatacheck<-function(featuredata,
                        sampledata=NULL, 
                        metabolitedata=NULL){
   
+  #local function to check if names are unique
+  is.unique <- function(my.names){
+    return(all(!duplicated(my.names)))
+  }
+  
   #Check featuredata    
   if (!class(featuredata) %in% c("data.frame", "matrix")) 
     stop("featuredata must be a matrix or a dataframe")
   if (is.null(rownames(featuredata)))
     stop("featuredata must have row names") 
-  else if (!all(isUnique(rownames(featuredata))))
+  else if (!is.unique(rownames(featuredata)))
     stop("featuredata rownames must be unique")
   if (is.null(colnames(featuredata)))
     stop("featuredata must have column names")
-  else if (!all(isUnique(colnames(featuredata))))
+  else if (!is.unique(colnames(featuredata)))
     stop("featuredata column names must be unique")
   
   #Check sampledata

@@ -16,8 +16,8 @@
 #' a large proportion of missing values. If the proportion of missing
 #' values is equal to or more than the sample.cutoff in any row, that whole sample
 #' will be deleted.
-#' @param method Missing value replacement method. Should be either "knn" (the kth nearest neighbour algorithm) or
-#'  "replace" (replacing by half the minimum detectable signal ).
+#' @param method Missing value replacement method. Should be either "knn" (the kth nearest neighbour algorithm),
+#'  "replace" (replacing by half the minimum detectable signal ), or "none".
 #' @param k The number of nearest neighbours to be used in the knn algorithm
 #' @param  featuremax.knn For the knn algorithm. The maximum proportion of missing data allowed in 
 #' any feature. For any features with more than featuremax.knn proportion missing,
@@ -51,7 +51,7 @@ MissingValues <-function(featuredata,
                          metabolitedata=NULL,
                          feature.cutoff=0.8, 
                          sample.cutoff=0.8,
-                         method=c("knn","replace"),
+                         method=c("knn","replace","none"),
                          k=10,
                          featuremax.knn=0.8,
                          samplemax.knn=0.8,
@@ -67,9 +67,9 @@ MissingValues <-function(featuredata,
     sampledata<-data.frame(names=rownames(featuredata))
   
   # sampledata should be a dataframe
-    if (!class(sampledata) %in% c("data.frame")) 
-      stop("sampledata should be a dataframe")
-
+  if (!class(sampledata) %in% c("data.frame")) 
+    stop("sampledata should be a dataframe")
+  
   # metabolitedata should be a dataframe
   if (!class(metabolitedata) %in% c("data.frame")) 
     stop("metabolitedata should be a dataframe")
@@ -79,58 +79,60 @@ MissingValues <-function(featuredata,
     stop("sampledata should be a dataframe")
   
   method<-match.arg(method)
-  if (length(method)==2 | method != "knn" & method != "replace")
-    print("Method should either be knn or replace")
-  set.seed(seed)
-  vars <- colnames(featuredata)[1:length(colnames(featuredata))] 
-  var_count <- length(vars)
-  row_count <- dim(featuredata)[1]
-  matrix_min <- min(featuredata, na.rm = TRUE)
-  write(" -> Checking features...", "")
   
-  # Remove features that have >= feature.cutoff proportion missing
-  mt_cols <- which(colSums(is.na(featuredata)) >= row_count*feature.cutoff)
-  if (!is.null(feature.cutoff)){
-    if (length(mt_cols) > 0) {
-      pretrim_data <- featuredata[, -c(mt_cols)]
-      metabolitedata <- metabolitedata[-c(mt_cols),]
-      write(paste("Features with ", feature.cutoff," proportion missing are removed.",sep=""),"") #GO 23/5had problem writing
+  if (method!="none"){
+    if (length(method)==2 | method != "knn" & method != "replace")
+      print("Method should either be knn or replace")
+    set.seed(seed)
+    vars <- colnames(featuredata)[1:length(colnames(featuredata))] 
+    var_count <- length(vars)
+    row_count <- dim(featuredata)[1]
+    matrix_min <- min(featuredata, na.rm = TRUE)
+    write(" -> Checking features...", "")
+    
+    # Remove features that have >= feature.cutoff proportion missing
+    mt_cols <- which(colSums(is.na(featuredata)) >= row_count*feature.cutoff)
+    if (!is.null(feature.cutoff)){
+      if (length(mt_cols) > 0) {
+        pretrim_data <- featuredata[, -c(mt_cols)]
+        metabolitedata <- metabolitedata[-c(mt_cols),]
+        write(paste("Features with ", feature.cutoff," proportion missing are removed.",sep=""),"") #GO 23/5had problem writing
+        
+      } else {pretrim_data <- featuredata}     #GO 16/5 
+    }
+    else {
+      pretrim_data <- featuredata
+    }
+    
+    write(" -> Checking samples...", "")
+    # Remove samples that have > sample.cutoff proportion missing
+    mt_rows <- which(rowSums(is.na(pretrim_data)) >= var_count*sample.cutoff)
+    if (!is.null(sample.cutoff)){
+      if (length(mt_rows) > 0) {
+        pretrim_data <- pretrim_data[-c(mt_rows), ]
+        sampledata <- sampledata[-c(mt_rows), ]
+        write(paste("Samples with", sample.cutoff,"proportion missing are removed.",sep=" "),"") #GO 23/5 had problem writing
+      }
+    }
+    
+    pretrim_data<-as.matrix(pretrim_data)
+    if (method=="knn")
+    {
+      featuredata<-t(impute.knn(data=t(pretrim_data) ,
+                                k = k, 
+                                rowmax = featuremax.knn*100, 
+                                colmax = samplemax.knn*100, 
+                                maxp = 1500, rng.seed=seed)$data)
       
-    } else {pretrim_data <- featuredata}     #GO 16/5 
-  }
-  else {
-    pretrim_data <- featuredata
-  }
-  
-  write(" -> Checking samples...", "")
-  # Remove samples that have > sample.cutoff proportion missing
-  mt_rows <- which(rowSums(is.na(pretrim_data)) >= var_count*sample.cutoff)
-  if (!is.null(sample.cutoff)){
-    if (length(mt_rows) > 0) {
-      pretrim_data <- pretrim_data[-c(mt_rows), ]
-      sampledata <- sampledata[-c(mt_rows), ]
-      write(paste("Samples with", sample.cutoff,"proportion missing are removed.",sep=" "),"") #GO 23/5 had problem writing
+    } else if (method == "replace"){
+      if (matrix_min < 0) {
+        stop("The data contains negative values.")
+      }
+      pretrim_data[which(is.na(pretrim_data))]<- matrix_min/2
+      featuredata<-pretrim_data
+      
     }
   }
-  
-  pretrim_data<-as.matrix(pretrim_data)
-  if (method=="knn")
-  {
-    featuredata<-t(impute.knn(data=t(pretrim_data) ,
-                              k = k, 
-                              rowmax = featuremax.knn*100, 
-                              colmax = samplemax.knn*100, 
-                              maxp = 1500, rng.seed=seed)$data)
-    
-  } else if (method == "replace"){
-    if (matrix_min < 0) {
-      stop("The data contains negative values.")
-    }
-    pretrim_data[which(is.na(pretrim_data))]<- matrix_min/2
-    featuredata<-pretrim_data
-    
-  }
-  
   alldata <- c()
   alldata$featuredata <- featuredata
   alldata$sampledata <- sampledata

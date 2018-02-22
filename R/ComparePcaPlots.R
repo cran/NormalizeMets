@@ -58,6 +58,15 @@ ComparePcaPlots <- function(lfeaturedata, lgroupdata, saveplot=FALSE,
   # Get required info for multiple plots #
   
   num_of_plots <- length(lfeaturedata)
+  
+  # if only one grouping entered, use it for all plots
+  if (length(lgroupdata) ==1 & (num_of_plots>1)){
+    my.group <- lgroupdata[[1]]
+    for (ii in 1:num_of_plots){
+      lgroupdata[[ii]] <- my.group
+    }
+  }
+  
   if (length(lgroupdata)!= num_of_plots){
     stop("Make sure that lgroupdata is of the same size as featuredatal")
   }
@@ -161,7 +170,7 @@ ComparePcaPlots <- function(lfeaturedata, lgroupdata, saveplot=FALSE,
   
   for (jj in 1:num_of_plots){
     
-    col_list[[jj]] <- metabolomics::ColList(nlevels(group_list[[jj]]))  ##ColList
+    col_list[[jj]] <- ColList(nlevels(group_list[[jj]]))  ##ColList
     cols_used[[jj]] <- col_list[[jj]][as.numeric(group_list[[jj]])]
   
     pch_list[[jj]] <- PchList(nlevels(group_list[[jj]]))
@@ -169,7 +178,7 @@ ComparePcaPlots <- function(lfeaturedata, lgroupdata, saveplot=FALSE,
 
     # Get info for ploting legend
     unique.groups[[jj]] <- levels(group_list[[jj]])
-    cols[[jj]] <- metabolomics::ColList(length(unique.groups[[jj]]))   #ColList
+    cols[[jj]] <- ColList(length(unique.groups[[jj]]))   #ColList
   
     # Store PCA data in a meaningful namespace
     pca_scores[[jj]] <- pca[[jj]]$x

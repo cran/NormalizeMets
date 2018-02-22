@@ -17,6 +17,10 @@
 #' is to be shown.
 #' @param saveinteractiveplot A logical indication whether to save the interactive plot as
 #' an \code{"html"} file.
+#' @param return.interactive A logical indication whether an interactive plot should be returned as 
+#' a variable by the function.
+#' @param numeric.mets A logical indication whether metabolite names are numeric. If \code{TRUE}, "m"
+#' is added before each metabolite name displyed on the graph.
 #' @param colramp A vector containing (in order), the desired number of color elements in the panel,
 #' color to use for the lowest, color to use for the highest for the non-interactive plot.
 #' @param scale A character indicating if the values should be scaled
@@ -51,6 +55,7 @@
 HeatMap <- function (featuredata, groupdata, saveplot=FALSE, plotname="heatmap",
                      savetype= c("png","bmp","jpeg","tiff","pdf"),
                      interactiveplot = TRUE, saveinteractiveplot=FALSE,   #GO 
+                     return.interactive = FALSE, numeric.mets = FALSE,
                      colramp = c(75, "magenta", "green"), 
                      scale = c("row", "column", "none"),
                      dendrogram = c("column", "row", "both", "none"),
@@ -63,6 +68,10 @@ HeatMap <- function (featuredata, groupdata, saveplot=FALSE, plotname="heatmap",
     .parold <- par(no.readonly = TRUE)
     on.exit(par(.parold))
     
+    #add m to name if needed, converts met name to string
+    if(numeric.mets==TRUE){
+      colnames(featuredata) <- paste0("m",colnames(featuredata))
+    }
     
     # Convert input to inputdata type
     inputdata <- ToInputdata(featuredata,groupdata)
@@ -73,6 +82,11 @@ HeatMap <- function (featuredata, groupdata, saveplot=FALSE, plotname="heatmap",
     
     # Get the saving format
     savetype <- match.arg(savetype)
+    
+    #add m to name if needed, converts met name to string
+    if(numeric.mets==TRUE){
+      colnames(featuredata) <- paste0("m",colnames(featuredata))
+    }
     
     # Create groups information, colour scale
     groups <- factor(inputdata[, 1], levels = unique(inputdata[, 1]))
@@ -95,7 +109,8 @@ HeatMap <- function (featuredata, groupdata, saveplot=FALSE, plotname="heatmap",
     
     # Create heatmap
     inputdata <- t(editcolnames(inputdata)[, -1])
-    heatmap_fn(inputdata, saveplot, plotname, savetype, interactiveplot, saveinteractiveplot,
+    p <- heatmap_fn(inputdata, saveplot, plotname, savetype, interactiveplot, saveinteractiveplot,
+       return.interactive,
        col = colorpanel(n=as.numeric(colramp[1]), low=colramp[2],  high=colramp[3]), 
        scale = scale, dendrogram = dendrogram, 
        margins = margins, key = key, symkey = FALSE, density.info = "none", 
@@ -103,4 +118,8 @@ HeatMap <- function (featuredata, groupdata, saveplot=FALSE, plotname="heatmap",
        keysize = keysize, distfun = function(x) dist(x, method = distmethod), 
        hclustfun = function(x) hclust(x, method = aggmethod), Rowv=Rowv,
        ...)
+    
+    if (return.interactive ==TRUE){
+      return(p)
+    }
 }

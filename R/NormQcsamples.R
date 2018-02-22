@@ -24,9 +24,9 @@
 #' @param saveoutput A logical indicating whether the normalised data matrix and related plots
 #' should be saved.
 #' @param outputname The name of the output file if the output has to be saved.
-#' @param ... Extra inputs for the \code{\link[statTarget]{shiftCor}} function
+#' @param ... Extra input for the \code{statTarget::shiftCor} function.
 #' @return The result is an object of class \code{\link[NormalizeMets:alldata]{alldata}}. 
-#' @seealso \code{\link[statTarget]{shiftCor}}.
+#' @seealso \code{statTarget::shiftCor}.
 #' @author Alysha M De Livera, Gavriel Olshansky
 #' @references  Luan H (2017). statTarget: Statistical Analysis of Metabolite Profile. 
 #' R package version 1.6.0, https://github.com/13479776/statTarget.

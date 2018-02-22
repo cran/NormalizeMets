@@ -23,7 +23,7 @@
 #' Maintainer: Alysha M De Livera <alyshad@unimelb.edu.au>
 NULL
 
-
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("mixdata"))
 
 
 #' Metabolomics all data - class

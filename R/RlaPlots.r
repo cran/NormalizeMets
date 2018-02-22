@@ -1,8 +1,3 @@
-# across, within group
-# across - remove med for met, boxplot sample
-# within - all groups, remove median for each group, then plot
-
-
 #' RLA plots
 #' 
 #' Produces within group and across group relative log abundance plots to
@@ -245,7 +240,7 @@ RlaPlots <- function(featuredata, groupdata, minoutlier = 0.5, type=c("ag", "wg"
       }
     }
     
-    p <- layout(p,title = plotname, xaxis = list(title = xlabel, range = c(0.5,total_samples+0.5)))
+    p <- layout(p,title = plotname, xaxis = list(title = xlabel, range = c(0.5,total_samples+0.5)), yaxis = list(range = ylim))
     
     if (saveinteractiveplot){                                               
       htmlwidgets::saveWidget(p, paste(interactivesavename,".html",sep=""))

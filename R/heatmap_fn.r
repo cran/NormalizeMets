@@ -1,7 +1,8 @@
 heatmap_fn <- function(inputdata, 
     #parameters for saving the output and displaying an interactive plot
     saveplot = FALSE, plotname = "heatmap", savetype, interactiveplot = TRUE,
-    saveinteractiveplot = FALSE,
+    saveinteractiveplot = FALSE, return.interactive = return.interactive,
+    #whether the interactive plot should only be ploted or returned as a variable
     # Dendrograms
     Rowv=TRUE, Colv=if(symm) "Rowv" else TRUE, distfun=dist, hclustfun=hclust,
     dendrogram=c("both", "row", "column", "none"), symm=FALSE,
@@ -39,6 +40,8 @@ heatmap_fn <- function(inputdata,
     # Plot layout
     lmat=NULL, lhei=NULL, lwid=NULL, ...)
 {
+  
+  
     # TODO: if no row dendrogram, plot colour scale as strip on LHS.
     
     # Define scaling function
@@ -303,6 +306,8 @@ heatmap_fn <- function(inputdata,
     retval$breaks <- breaks
     retval$col <- col
     
+    
+    if(return.interactive == FALSE){  #------------------------------------------
     #
     #    Plot layout
     #
@@ -643,6 +648,9 @@ heatmap_fn <- function(inputdata,
       dev.off()
     }
     
+    }  #end of bracket - this part is executed only if return.interactive is FALSE -----------
+    
+    
     #Check if interactive plot is needed and make the plot
     if (interactiveplot == TRUE){
       
@@ -668,6 +676,7 @@ heatmap_fn <- function(inputdata,
                                  sep = "")
         }
       }
+      
     
       p <- plot_ly(z = retval$data_mat,x = colnames(retval$data_mat),
                   y = rownames(retval$data_mat), type = "heatmap",
@@ -681,6 +690,10 @@ heatmap_fn <- function(inputdata,
       
       if (saveinteractiveplot){                                               
         htmlwidgets::saveWidget(p, paste("interactive_",plotname,".html",sep=""))
+      }
+      
+      if(return.interactive == TRUE){
+        return(p)
       }
       
       print(p)

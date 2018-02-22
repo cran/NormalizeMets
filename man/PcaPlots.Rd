@@ -7,7 +7,8 @@
 PcaPlots(featuredata, groupdata, saveplot = FALSE,
   saveinteractiveplot = FALSE, plotname = "", savetype = c("png", "bmp",
   "jpeg", "tiff", "pdf"), interactiveonly = FALSE, interactiveplots = TRUE,
-  y.axis = 1, x.axis = 2, center = TRUE, scale = TRUE, main = NULL,
+  y.axis = 1, x.axis = 2, center = TRUE, scale = TRUE,
+  userinput = TRUE, returninteractive = FALSE, main = NULL,
   varplot = FALSE, multiplot = FALSE, n = 3, cols = NULL,
   cex_val = 0.7, ...)
 }
@@ -46,6 +47,13 @@ have zero mean.}
 \item{scale}{A logical indicating whether the variables should be scaled to
 have unit variance before the analysis takes place.}
 
+\item{userinput}{A logical indication whether user input should be required to 
+show plots progressively. Should be \code{FALSE} when the plots are to be passed
+on to other functions or saved as variables for later use.}
+
+\item{returninteractive}{A logical indication whether a list of the interactive plots
+should be returned by the function}
+
 \item{main}{Plot title.}
 
 \item{varplot}{A logical indicating whether explained variance should be
@@ -69,8 +77,16 @@ Produces PCA plots of the metabolomics data.
 \examples{
 
     data(mixdata)
+    
+    # produce all results
     PcaPlots(mixdata$featuredata,mixdata$sampledata[,3],multiplot = TRUE, 
-    varplot = TRUE, interactiveplot = TRUE)
+    varplot = TRUE, interactiveplots = TRUE)
+    
+    # return a list of the ineractive plots only
+    interactive.pca <- PcaPlots(mixdata$featuredata,mixdata$sampledata[,3],
+    interativeonly = TRUE, interactiveplots = TRUE,
+    userinput = FALSE, returninteractive = TRUE)
+    
 
 }
 \seealso{

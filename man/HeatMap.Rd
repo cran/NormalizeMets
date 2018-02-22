@@ -6,7 +6,8 @@
 \usage{
 HeatMap(featuredata, groupdata, saveplot = FALSE, plotname = "heatmap",
   savetype = c("png", "bmp", "jpeg", "tiff", "pdf"), interactiveplot = TRUE,
-  saveinteractiveplot = FALSE, colramp = c(75, "magenta", "green"),
+  saveinteractiveplot = FALSE, return.interactive = FALSE,
+  numeric.mets = FALSE, colramp = c(75, "magenta", "green"),
   scale = c("row", "column", "none"), dendrogram = c("column", "row",
   "both", "none"), distmethod = "euclidean", aggmethod = "complete",
   margins = c(5, 5), key = TRUE, keysize = 1.5, cexRow = 0.5,
@@ -32,6 +33,12 @@ is to be shown.}
 
 \item{saveinteractiveplot}{A logical indication whether to save the interactive plot as
 an \code{"html"} file.}
+
+\item{return.interactive}{A logical indication whether an interactive plot should be returned as 
+a variable by the function.}
+
+\item{numeric.mets}{A logical indication whether metabolite names are numeric. If \code{TRUE}, "m"
+is added before each metabolite name displyed on the graph.}
 
 \item{colramp}{A vector containing (in order), the desired number of color elements in the panel,
 color to use for the lowest, color to use for the highest for the non-interactive plot.}

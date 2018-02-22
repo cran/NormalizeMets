@@ -34,7 +34,7 @@ should be saved.}
 
 \item{outputname}{The name of the output file if the output has to be saved.}
 
-\item{...}{Extra inputs for the \code{\link[statTarget]{shiftCor}} function}
+\item{...}{Extra input for the \code{statTarget::shiftCor} function.}
 }
 \value{
 The result is an object of class \code{\link[NormalizeMets:alldata]{alldata}}.
@@ -65,7 +65,7 @@ large-scale metabolic profiling of serum and plasma using gas chromatography and
 liquid chromatography coupled to mass spectrometry. Nat. Protoc., 6, 1060-1083
 }
 \seealso{
-\code{\link[statTarget]{shiftCor}}.
+\code{statTarget::shiftCor}.
 }
 \author{
 Alysha M De Livera, Gavriel Olshansky

@@ -5,9 +5,9 @@
 \title{Missing value replacement}
 \usage{
 MissingValues(featuredata, sampledata = NULL, metabolitedata = NULL,
-  feature.cutoff = 0.8, sample.cutoff = 0.8, method = c("knn", "replace"),
-  k = 10, featuremax.knn = 0.8, samplemax.knn = 0.8, seed = 100,
-  saveoutput = FALSE, outputname = "nomissing")
+  feature.cutoff = 0.8, sample.cutoff = 0.8, method = c("knn", "replace",
+  "none"), k = 10, featuremax.knn = 0.8, samplemax.knn = 0.8,
+  seed = 100, saveoutput = FALSE, outputname = "nomissing")
 }
 \arguments{
 \item{featuredata}{A data frame in the featuredata format. 
@@ -28,8 +28,8 @@ a large proportion of missing values. If the proportion of missing
 values is equal to or more than the sample.cutoff in any row, that whole sample
 will be deleted.}
 
-\item{method}{Missing value replacement method. Should be either "knn" (the kth nearest neighbour algorithm) or
-"replace" (replacing by half the minimum detectable signal ).}
+\item{method}{Missing value replacement method. Should be either "knn" (the kth nearest neighbour algorithm),
+"replace" (replacing by half the minimum detectable signal ), or "none".}
 
 \item{k}{The number of nearest neighbours to be used in the knn algorithm}
 

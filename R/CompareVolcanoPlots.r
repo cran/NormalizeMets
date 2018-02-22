@@ -11,7 +11,7 @@
 #' 0.05.
 #' @param coeflimit A numeric indicating the lower fold cutoff. The default is
 #' set to 2.
-#' @param yrange A numeric indicating the maximum y value (scale of y-axis is -log(p-value)), can only
+#' @param yrange A numeric for the maximum y value (scale of y-axis is -log(p-value)), can only
 #' be set to a value as big as the maximum y-value in the plots.
 #' @param negcontrol A vector with the names of the metabolites used as negative controls,
 #' to be coloured differently.

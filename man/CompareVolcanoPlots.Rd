@@ -25,7 +25,7 @@ data supplied to be displayed on the plot.}
 \item{coeflimit}{A numeric indicating the lower fold cutoff. The default is
 set to 2.}
 
-\item{yrange}{A numeric indicating the maximum y value (scale of y-axis is -log(p-value)), can only
+\item{yrange}{A numeric for the maximum y value (scale of y-axis is -log(p-value)), can only
 be set to a value as big as the maximum y-value in the plots.}
 
 \item{negcontrol}{A vector with the names of the metabolites used as negative controls,
