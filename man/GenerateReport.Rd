@@ -22,7 +22,9 @@ Unique sample names should be provided as row names.}
 
 \item{metabolitedata}{A dataframe with metabolite information matching featuredata.}
 
-\item{normmeth}{A list of up to 3 normalisation methods, for combined methods, the list should consist of
+\item{normmeth}{A list of up to 3 normalisation methods. Must be one of "is",
+"ccmn", "nomis", "ruv2", "ruvrand", "rlsc", "median", "mean", "sum". 
+For combined methods, the list should consist of
 vector with entries corresponding in order to the 2 methods to beused jointly.}
 
 \item{factorOI}{factor of interest to be used, should correpond to column number or 

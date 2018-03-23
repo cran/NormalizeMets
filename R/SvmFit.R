@@ -21,6 +21,7 @@
 #' along with the area under the curve (AUC) printed.
 #' @param saveoutput A logical indicating whether the outputs should be saved in the format
 #' \code{\link[e1071]{write.svm}}
+#' @param main Plot title.
 #' @param outputname The name of the output file if the output has to be saved.
 #' @param ... Arguments to be passed on to other methods.
 #' @return If tune=FALSE, an object of class "svm" \code{\link[e1071]{svm}} 
@@ -50,6 +51,7 @@ SvmFit <- function(featuredata, groupdata,
                    rocplot=TRUE,
                    saveoutput=FALSE,
                    outputname="svm",
+                   main=NULL,
                    ...){
   
   
@@ -87,7 +89,7 @@ SvmFit <- function(featuredata, groupdata,
       if (rocplot)
         plot(roc(predictions=preds, labels=pgroupdata),
              col="blue",
-             lwd=2)
+             lwd=2,main=main)
       text(0.5,0.5, paste("AUC=", round(auc(roc(predictions=preds, labels=pgroupdata)),2)),
            col="brown")
       

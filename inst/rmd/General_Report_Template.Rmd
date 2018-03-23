@@ -31,7 +31,7 @@ params:
   
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 knitr::opts_chunk$set(echo = FALSE)
 library(NormalizeMets)
 
@@ -84,15 +84,15 @@ if (!is.null(params$rlsc.sampledata)){
 ```
 
 
-After removing missing values and log transforming the data, explore the data using various plots.
+The log transformed data matrix can then be explored using various plots.
 
 
 ### RLA Plots
 
-RLA (Relative Log Abundance) plots are good for initial visualisation. Consistent sized and centered boxes are desirable. See [@DeLivera2012a @DeLivera2015] for details.
+RLA (Relative Log Abundance) plots are a good Way of visualising the data. Consistent sized and centered boxes are desirable. See [@DeLivera2012a @DeLivera2015] for several examples.
 
 ```{r samplerla, eval = TRUE, fig.align='center', results='asis', fig.width = 9}
-RlaPlots(imp$featuredata, gfactor, saveinteractiveplot = params$saveplots, plotname = "Sample-wise RLA plot")
+RlaPlots(imp$featuredata, imp$sampledata[,params$gfactor], saveinteractiveplot = params$saveplots, plotname = "Sample-wise RLA plot")
 
 ```
 
@@ -109,13 +109,15 @@ RlaPlots(t(imp$featuredata), rep("group",dim(imp$featuredata)[2]), saveinteracti
 PCA plots can be used to identify any outlying samples and to get a preliminary understanding of the structure of the data.
 
 ```{r pca1, eval = TRUE, fig.align='center', results='asis'}
-PcaPlots(imp$featuredata, imp$sampledata[,params$factorOI], varplot = TRUE, multiplot = TRUE, interactiveonly = TRUE, interactiveplots = FALSE, userinput = FALSE)
+# PcaPlots(imp$featuredata, imp$sampledata[,params$factorOI], varplot = TRUE, multiplot = TRUE, interactiveonly = TRUE, interactiveplots = FALSE, userinput = FALSE)
+
+PcaPlots(imp$featuredata, imp$sampledata[,params$gfactor], varplot = TRUE, multiplot = TRUE, interactiveonly = TRUE, interactiveplots = FALSE, userinput = FALSE)
 ```
 
 <!-- First look at the Variance plot (varplot) to see what proportion of the overall variation is explained by each principal component (usually interested in the first few that account for most of the variance). -->
 
 ```{r pca2, eval = TRUE, fig.align='center', results='asis', include = TRUE,fig.width=9}
-my.pca <- PcaPlots(imp$featuredata, imp$sampledata[,params$factorOI], varplot = FALSE, multiplot = FALSE, interactiveonly = TRUE, interactiveplots = TRUE, userinput = FALSE, returninteractive = TRUE)
+my.pca <- PcaPlots(imp$featuredata, imp$sampledata[,params$gfactor], varplot = FALSE, multiplot = FALSE, interactiveonly = TRUE, interactiveplots = TRUE, userinput = FALSE, returninteractive = TRUE)
 my.pca[[1]]
 cat("\n\n________________________________________________________________________________________________________________\n\n\n\n")
 my.pca[[2]]
@@ -127,7 +129,7 @@ my.pca[[2]]
 Using a dendrogram to visualize clusters in the data. 
 
 ```{r dendrogram, eval=TRUE, echo=FALSE, fig.align='center', warning=FALSE,results='hold'}
-Dendrogram(imp$featuredata,imp$sampledata[,params$factorOI])
+hca<-Dendrogram(imp$featuredata,imp$sampledata[,params$gfactor])
 ```
 
 
@@ -137,7 +139,7 @@ Using a heat map where samples and metabolites are sorted according to their res
 
 ```{r heatmap, eval = TRUE,fig.align='center', fig.width = 9, warning= FALSE}
 
-HeatMap(imp$featuredata, imp$sampledata[,params$factorOI], return.interactive = TRUE, interactiveplot = TRUE, numeric.mets = TRUE)
+HeatMap(imp$featuredata, imp$sampledata[,params$gfactor], return.interactive = TRUE, interactiveplot = TRUE, numeric.mets = TRUE)
 
 ```
 
@@ -186,7 +188,7 @@ for (ii in 1:params$Nmethods){
       if (is.null(params$qcmets)){
         qcmets <- stop("qcmets missing")
       } else {
-        qcmets <- params$qcmets
+        qcmets <- which(imp$metabolitedata[,params$qcmets]=="IS"|imp$metabolitedata[,params$qcmets]==1)
       }
       
       if (!is.null(params$ccmn.factor) & params$normmeth[[ii]] == "ccmn"){
@@ -363,7 +365,7 @@ CompareVolcanoPlots(lcoef = Coefs,lpvals = Pvals,normmeth = normmeth.fit, yrange
 
 ### Compare the distribution of the p-values
 
-Use Histograms to compare the distribution of the p-values obtained from the fitted linear model. If there are no differentially abundant metabolites present in the data set, the distribution of p-values should be uniform between zero and one. Hence, with the presence of some differentially abundant metabolites, a histogram of p-values should be uniformly distributed but with a peak close to zero [@DeLivera2015].
+Use histograms to compare the distribution of the p-values obtained from the fitted linear model. If there are no differentially abundant metabolites present in the data set, the distribution of p-values should be uniform between zero and one. Hence, with the presence of some differentially abundant metabolites, a histogram of p-values should be uniformly distributed but with a peak close to zero [@DeLivera2015].
 
 
 ```{r compPhist, eval = TRUE, fig.align='center', fig.width=9, fig.height=7}
@@ -381,7 +383,7 @@ Using RLA plots, the residuals obtained from the fitted linear model can be expl
 
 ```{r comparerlaresid, eval = TRUE, include=TRUE, fig.align='center', fig.width=9, fig.height=7}
 
-CompareRlaPlots(resids,groupdata=params$gfactor,
+CompareRlaPlots(resids,groupdata=imp$sampledata[,params$gfactor],
                 yrange=c(-3,3),
                 normmeth = normmeth.norm, plottitle = "Sample-Wise Compare RLA of the residuals")
 
@@ -417,7 +419,7 @@ Use RLA plots,
 
 ```{r comparerla, eval = TRUE, include=TRUE, fig.align='center', fig.width=9, fig.height=7}
 
-CompareRlaPlots(featuredata.norm, gfactor, normmeth = normmeth.norm, yrange = c(-1,1), plottitle = "Sample-Wise Compare RLA") 
+CompareRlaPlots(featuredata.norm, imp$sampledata[,params$gfactor], normmeth = normmeth.norm, yrange = c(-1,1), plottitle = "Sample-Wise Compare RLA") 
 
 #cat("\n _______________________________________________________________________________________________________\n\n\n")
 
@@ -430,7 +432,7 @@ Using PCA plots,
 
 ```{r comparepca, eval = TRUE, include=TRUE, fig.align= 'center', fig.width=9, fig.height=8}
 
-ComparePcaPlots(featuredata.norm, list(imp$sampledata[,params$factorOI]), lmain = normmeth.norm)
+ComparePcaPlots(featuredata.norm, list(imp$sampledata[,params$gfactor]), lmain = normmeth.norm)
 
 
 ```
@@ -439,10 +441,50 @@ ComparePcaPlots(featuredata.norm, list(imp$sampledata[,params$factorOI]), lmain 
 
 ### Visualisation of the removed unwanted variation component
 
+Use RLA plots to explore the component of unwanted variation removed by normalization. 
 
+
+```{r comparerlauv, eval = FALSE, include=FALSE, fig.align='center', fig.width=9, fig.height=7}
+
+if (length(which(normmeth.fit=="ruvrand"))!=0){
+  ruvrandnorm<-normalisedAll[[which(normmeth.fit=="ruvrand")-1]]
+  lfeaturedata<-list(unadj=imp$featuredata,ruv=ruvrandnorm$featuredata,
+                     ruvuv=ruvrandnorm$uvdata)
+  CompareRlaPlots(lfeaturedata,
+                  groupdata=imp$sampledata[,params$gfactor],
+                  normmeth=c("Unadjusted:", "RUVrand normalized:", 
+                             "RUVrand: removed uv:"),
+                  yrange=c(-3,3))
+  
+} else
+  print("This plot is not available for the methods you have entered.")
+
+```
 
 
 ### Clustering accuracy of the known samples
+
+```{r dendclust, eval = TRUE,fig.align='center', fig.width = 5,fig.height = 5, warning= FALSE}
+
+
+
+if (length(which(normmeth.fit=="ruv2"))!=0){
+  normalisedDclust<-normalisedD
+  normalisedDclust[[which(normmeth.fit=="ruv2")-1]]<-NULL
+  normmethclust<-params$normmeth
+  normmethclust[[which(normmeth.fit=="ruv2")-1]]<-NULL
+} else {                                                                      #GO
+  normalisedDclust <- normalisedD
+  normmethclust <- params$normmeth
+}
+
+for (ii in 1:(Nmethods-length(which(normmeth.fit=="ruv2")))){
+  hca<-Dendrogram(featuredata=normalisedDclust[[ii]],
+             groupdata=imp$sampledata[,params$gfactor],
+             main=normmethclust[[ii]]
+  )}
+
+```
 
 
 ## Classification 
@@ -452,6 +494,19 @@ ComparePcaPlots(featuredata.norm, list(imp$sampledata[,params$factorOI]), lmain 
 Use the RLA and PCA plots above.
 
 ### Classification accuracy of known samples
+```{r svm, eval = TRUE,fig.align='center', fig.width = 5, warning= FALSE}
+
+for (ii in 1:(Nmethods-length(which(normmeth.fit=="ruv2")))){
+  
+svm<-SvmFit(featuredata=normalisedDclust[[ii]], 
+            groupdata=imp$sampledata[,params$gfactor],
+            crossvalid=TRUE,
+            k=5,
+            rocplot = TRUE,
+            main=normmethclust[[ii]])
+}
+```
+
 
 ## Correlation analysis 
 
@@ -461,26 +516,34 @@ Use the RLA and PCA plots above.
 
 ### Explore the distribution of correlation coefficients and the p-values 
 
+```{r corr, eval = TRUE, fig.align='center', fig.width=5, fig.height=5, results='hold'}
+lcor<-list()
+lcorp<-list()
+lcorcoef<-list()
+lcor[[1]]<-Corr(imp$featuredata)
+lcorcoef[[1]]<-lcor[[1]]$results[,3]
+lcorp[[1]]<-lcor[[1]]$results[,4]
 
-<!-- ### Compare Correlation Coefficients -->
 
-<!-- Exploring whether the normalised data result in expected correlation structures. See [@Freytag2015] for a detailed example of this concept. -->
+for (ii in 2:(Nmethods-length(which(normmeth.fit=="ruv2")))){
+  lcor[[ii]]<-Corr(normalisedDclust[[ii-1]])
+  lcorcoef[[ii]]<-lcor[[ii]]$results[,3]
+  lcorp[[ii]]<-lcor[[ii]]$results[,4]
+  
+}
+
+ComparePvalHist(lcorcoef,normmeth = c("unadjusted", unlist(normmethclust)),
+                xlim=c(-1,1), xlab="Correlation coefficients") 
+
+```
+
+```{r corrp, eval = TRUE, fig.align='center', fig.width=5, fig.height=5, results='hold'}
+
+ComparePvalHist(lcorp,normmeth = c("unadjusted", unlist(normmethclust)),
+                xlim=c(0,1), xlab="Correlation p-values") 
 
 
-<!-- ```{r fitLM, eval = TRUE, include = TRUE, cache = TRUE} -->
-<!-- cor_result<-list() -->
-<!-- for (ii in 1:(Nmethods)){ -->
-
-<!-- cor_result[[ii]]<-Corr(normalisedD[[ii]]) -->
-<!-- lcor<-cor_result[[ii]]$results[,3] -->
-<!-- lcor_p<-cor_result[[ii]]$results[,4] -->
-<!-- ComparePvalHist(lcor,normmeth = normmeth.fit, -->
-<!--                 xlim=c(-1,1), xlab="Correlation coefficients") -->
-<!-- ComparePvalHist(lcor_p,normmeth = normeth.fit, -->
-<!--                 xlim=c(0,1)) -->
-
-<!-- } -->
-<!-- ``` -->
+```
 
 
 ##References

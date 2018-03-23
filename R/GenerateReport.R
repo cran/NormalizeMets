@@ -9,7 +9,9 @@
 #' Unique sample names should be provided as row names.
 #' @param sampledata A dataframe with sample information matching featuredata.
 #' @param metabolitedata A dataframe with metabolite information matching featuredata.
-#' @param normmeth A list of up to 3 normalisation methods, for combined methods, the list should consist of
+#' @param normmeth A list of up to 3 normalisation methods. Must be one of "is",
+#' "ccmn", "nomis", "ruv2", "ruvrand", "rlsc", "median", "mean", "sum". 
+#' For combined methods, the list should consist of
 #' vector with entries corresponding in order to the 2 methods to beused jointly.
 #' @param factorOI factor of interest to be used, should correpond to column number or 
 #' column name in sampledata corresponding to the factor of interest for the analysis.
@@ -70,9 +72,10 @@ GenerateReport <- function(featuredata = NULL, sampledata = NULL, metabolitedata
     k <- 3
     missingvals = "knn"
     factorOI <- "type"
-    gfactor<- sampledata[,"batch"]
+    gfactor<- "batch"
     ccmn.factor <- "batch"
-    qcmets<-which(metabolitedata$type=="IS")
+    #qcmets<-which(metabolitedata$type=="IS")
+    qcmets <- "type"
   }
   
   #Featuredata needs column names
@@ -125,8 +128,7 @@ GenerateReport <- function(featuredata = NULL, sampledata = NULL, metabolitedata
 
   
   # Generate the report
-  rmarkdown::render(input = template_location, output_dir = getwd(), output_file = paste0(reportName,".html"), 
-                    output_options = list(self_contained = FALSE), run_pandoc = FALSE,
+  rmarkdown::render(input = template_location, output_dir = getwd(), output_file = paste0(reportName,".html"), output_options = list(self_contained = TRUE),
                     params = list(featuredata = featuredata, sampledata = sampledata, metabolitedata = metabolitedata,
                                   normmeth = normmeth, normtype = normtype, Nmethods = Nmethods,
                                   factorOI = factorOI, covars = covars, gfactor = gfactor,

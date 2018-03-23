@@ -7,7 +7,7 @@
 SvmFit(featuredata, groupdata, kernel = "radial", cost = 1, gamma = NULL,
   crossvalid = TRUE, k = 5, tune = FALSE, pred = TRUE,
   pfeaturedata = featuredata, pgroupdata = groupdata, rocplot = TRUE,
-  saveoutput = FALSE, outputname = "svm", ...)
+  saveoutput = FALSE, outputname = "svm", main = NULL, ...)
 }
 \arguments{
 \item{featuredata}{featuredata A data frame in the featuredata format. 
@@ -43,6 +43,8 @@ along with the area under the curve (AUC) printed.}
 \code{\link[e1071]{write.svm}}}
 
 \item{outputname}{The name of the output file if the output has to be saved.}
+
+\item{main}{Plot title.}
 
 \item{...}{Arguments to be passed on to other methods.}
 }

@@ -119,7 +119,7 @@ Dendrogram <- function(featuredata, groupdata, saveplot=FALSE, plotname="dendrog
   plot(hca_sample, 
        labels=rep("", length(groups)),        # clear labels here
        hang=(-1),                             # even-length ends
-       main=NULL,                             # no plot title 
+       main=main,                             # no plot title 
        ########### fix (oma? mtext?)
        axes=FALSE,                            # suppress axes (see below)
        xlab="",                               # suppress all axis titles
